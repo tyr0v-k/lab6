@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -42,10 +43,15 @@ class HomeFragment : Fragment() {
         binding.let { binding ->
             binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-            lifecycleScope.launch{
-                val itemsLists = ktorApi.getReleases()
-                itemAdapter = ItemAdapter(itemsLists)
-                binding.recyclerView.adapter=itemAdapter
+            try{
+                lifecycleScope.launch{
+                    val itemsLists = ktorApi.getReleases()
+                    itemAdapter = ItemAdapter(itemsLists)
+                    binding.recyclerView.adapter=itemAdapter
+                }
+            }
+            catch (e: Exception){
+                Toast.makeText(requireContext(), "Please, connect to the Internet", Toast.LENGTH_SHORT).show()
             }
         }
         Log.d("HOME_LOGGER","Home fragment started at " + Calendar.getInstance().time)
